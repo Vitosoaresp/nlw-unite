@@ -10,6 +10,7 @@ import {
 } from 'fastify-type-provider-zod';
 import { errorHandler } from './middlewares/error-handler';
 import { createEvent } from './routes/create-event';
+import { getEvent } from './routes/get-event';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -39,6 +40,7 @@ app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
 app.register(createEvent);
+app.register(getEvent);
 
 app.get('/', async (request, reply) => {
 	return { hello: 'world' };
