@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from 'zod';
 import { prisma } from '../lib/prisma';
+import { BadRequest } from '../utils/errors/bad-request';
 import { generateSlug } from '../utils/generate-slug';
 
 export async function createEvent(app: FastifyInstance) {
@@ -27,6 +28,14 @@ export async function createEvent(app: FastifyInstance) {
 			const { title, details, maximumAttendees } = request.body;
 
 			const slug = generateSlug(title);
+
+			const eventWithSameSlug = await prisma.event.findUnique({
+				where: { slug },
+			});
+
+			if (eventWithSameSlug !== null) {
+				throw new BadRequest('Event with the same title already exists');
+			}
 
 			const event = await prisma.event.create({
 				data: {
