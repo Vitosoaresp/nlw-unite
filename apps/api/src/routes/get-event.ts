@@ -22,6 +22,7 @@ export async function getEvent(app: FastifyInstance) {
 							slug: z.string(),
 							details: z.string().nullable(),
 							maximumAttendees: z.number().int().nullable(),
+							attendeesAmount: z.number().int(),
 						}),
 					}),
 				},
@@ -34,6 +35,18 @@ export async function getEvent(app: FastifyInstance) {
 				where: {
 					id: eventId,
 				},
+				select: {
+					id: true,
+					title: true,
+					slug: true,
+					details: true,
+					maximumAttendees: true,
+					_count: {
+						select: {
+							attendees: true,
+						},
+					},
+				},
 			});
 
 			if (!event) {
@@ -41,7 +54,14 @@ export async function getEvent(app: FastifyInstance) {
 			}
 
 			return reply.send({
-				event,
+				event: {
+					id: event.id,
+					attendeesAmount: event._count.attendees,
+					title: event.title,
+					slug: event.slug,
+					details: event.details,
+					maximumAttendees: event.maximumAttendees,
+				},
 			});
 		},
 	);
