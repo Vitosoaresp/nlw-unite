@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { NavLink } from './nav-link';
 
 export const Header = () => {
 	return (
@@ -8,10 +9,10 @@ export const Header = () => {
 			<nav>
 				<ul className="flex items-center gap-5">
 					<li>
-						<a className="font-medium text-sm text-zinc-300">Eventos</a>
+						<NavLink href="/eventos">Eventos</NavLink>
 					</li>
 					<li>
-						<a className="font-medium text-sm">Participantes</a>
+						<NavLink href="/participantes">Participantes</NavLink>
 					</li>
 				</ul>
 			</nav>

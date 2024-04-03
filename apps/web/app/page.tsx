@@ -1,4 +1,4 @@
-import { AttendeeList } from './components/attendee-list';
+import { AttendeeList } from './participantes/components/attendee-list';
 
 export default function Page() {
 	return (
