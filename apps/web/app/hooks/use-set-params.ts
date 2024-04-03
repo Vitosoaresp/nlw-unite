@@ -7,16 +7,25 @@ export const useSetParams = () => {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
-	const setParams = (newParams: string, value: string) => {
+	const setParams = (newParams: Record<string, string | number>) => {
 		const params = new URLSearchParams(searchParams);
-		if (!value) {
-			params.delete(newParams);
-		} else {
-			params.set(newParams, value);
-		}
+		Object.keys(newParams).forEach(key => {
+			params.set(key, String(newParams[key as string]));
+		});
 
 		replace(`${pathname}?${params.toString()}`);
 	};
 
-	return { setParams };
+	const search = searchParams.get('search') ?? '';
+	const page = Number(searchParams.get('page') ?? 1);
+	const perPage = Number(searchParams.get('perPage') ?? 10);
+
+	return {
+		setParams,
+		params: {
+			search,
+			page,
+			perPage,
+		},
+	};
 };

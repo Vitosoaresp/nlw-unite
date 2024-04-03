@@ -8,7 +8,7 @@ export const SearchBar = () => {
 	const { setParams } = useSetParams();
 
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setParams('search', e.target.value);
+		setParams({ search: e.target.value });
 	};
 
 	return (

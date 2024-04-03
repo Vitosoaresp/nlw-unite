@@ -1,3 +1,5 @@
+'use client';
+
 import { IconButton } from '@app/components/icon-button';
 import { Checkbox } from '@app/components/ui/checkbox';
 import {
@@ -9,7 +11,9 @@ import {
 	TableHeader,
 	TableRow,
 } from '@app/components/ui/table';
-import { attendees } from '@app/data/attendees';
+import { useSetParams } from '@app/hooks/use-set-params';
+import { getEventAttendeesFn } from '@app/service/get-event-attendees';
+import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -26,6 +30,34 @@ dayjs.extend(relativeTime);
 dayjs.locale('pt-br');
 
 export const AttendeeList = () => {
+	const { setParams, params } = useSetParams();
+	const { data } = useQuery({
+		queryFn: () => getEventAttendeesFn(params),
+		queryKey: ['attendees', params],
+		retry: 1,
+	});
+
+	const attendees = data?.attendees ?? [];
+
+	const total = data?.total ?? 0;
+	const totalPages = Math.ceil(total / params.perPage);
+
+	const handleNextPage = () => {
+		setParams({ page: params.page + 1 });
+	};
+
+	const handlePrevPage = () => {
+		setParams({ page: params.page - 1 });
+	};
+
+	const handleFirstPage = () => {
+		setParams({ page: 1 });
+	};
+
+	const handleLastPage = () => {
+		setParams({ page: totalPages });
+	};
+
 	return (
 		<div className="space-y-4">
 			<div className="flex gap-3 items-center">
@@ -48,7 +80,7 @@ export const AttendeeList = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{attendees.map(attendee => (
+					{attendees?.map(attendee => (
 						<TableRow key={attendee.id} className="border-white/10">
 							<TableCell>
 								<Checkbox />
@@ -74,21 +106,37 @@ export const AttendeeList = () => {
 				</TableBody>
 				<TableFooter className="bg-transparent border-t-white/10">
 					<TableRow>
-						<TableCell colSpan={3}>Mostrando 10 de 100 items</TableCell>
+						<TableCell colSpan={3}>
+							Mostrando 10 de {data?.total} items
+						</TableCell>
 						<TableCell className="text-right" colSpan={3}>
 							<div className="inline-flex gap-8 items-center">
-								<span>Pagina 1 de 23</span>
+								<span>
+									Pagina {params.page} de {totalPages}
+								</span>
 								<div className="flex gap-1.5">
-									<IconButton>
+									<IconButton
+										onClick={handleFirstPage}
+										disabled={params.page === 1}
+									>
 										<ChevronsLeft className="size-4" />
 									</IconButton>
-									<IconButton>
+									<IconButton
+										onClick={handlePrevPage}
+										disabled={params.page === 1}
+									>
 										<ChevronLeft className="size-4" />
 									</IconButton>
-									<IconButton>
+									<IconButton
+										onClick={handleNextPage}
+										disabled={params.page === totalPages}
+									>
 										<ChevronRight className="size-4" />
 									</IconButton>
-									<IconButton disabled>
+									<IconButton
+										onClick={handleLastPage}
+										disabled={params.page === totalPages}
+									>
 										<ChevronsRight className="size-4" />
 									</IconButton>
 								</div>
