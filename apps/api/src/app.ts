@@ -9,9 +9,11 @@ import {
 	validatorCompiler,
 } from 'fastify-type-provider-zod';
 import { errorHandler } from './middlewares/error-handler';
+import { checkIn } from './routes/check-in';
 import { createEvent } from './routes/create-event';
 import { getAttendeeBadge } from './routes/get-attendee-badge';
 import { getEvent } from './routes/get-event';
+import { getEventAttendees } from './routes/get-event-attendees';
 import { registerForEvent } from './routes/register-for-event';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -45,6 +47,8 @@ app.register(createEvent);
 app.register(getEvent);
 app.register(registerForEvent);
 app.register(getAttendeeBadge);
+app.register(checkIn);
+app.register(getEventAttendees);
 
 app.get('/', async (request, reply) => {
 	return { hello: 'world' };
