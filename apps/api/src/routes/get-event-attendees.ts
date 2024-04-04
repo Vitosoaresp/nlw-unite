@@ -17,6 +17,11 @@ export async function getEventAttendees(app: FastifyInstance) {
 					page: z.string().nullish().default('0').transform(Number),
 					perPage: z.string().nullish().default('10').transform(Number),
 					search: z.string().nullish(),
+					orderBy: z
+						.enum(['id', 'name', 'email', 'createdAt'])
+						.nullish()
+						.default('createdAt'),
+					sort: z.enum(['asc', 'desc']).nullish().default('desc'),
 				}),
 				response: {
 					200: z.object({
@@ -36,7 +41,7 @@ export async function getEventAttendees(app: FastifyInstance) {
 		},
 		async (req, reply) => {
 			const { eventId } = req.params;
-			const { page, perPage, search } = req.query;
+			const { page, perPage, search, orderBy, sort } = req.query;
 
 			const [attendees, total] = await Promise.all([
 				prisma.attendee.findMany({
@@ -63,9 +68,11 @@ export async function getEventAttendees(app: FastifyInstance) {
 							},
 					take: perPage,
 					skip: page * perPage,
-					orderBy: {
-						createdAt: 'desc',
-					},
+					orderBy: orderBy
+						? {
+								[orderBy]: sort,
+							}
+						: {},
 				}),
 				prisma.attendee.count({
 					where: search
