@@ -15,4 +15,6 @@ export interface GetAttendeesParams {
 	search: string;
 	page: number;
 	perPage: number;
+	orderBy: string;
+	sort: string;
 }

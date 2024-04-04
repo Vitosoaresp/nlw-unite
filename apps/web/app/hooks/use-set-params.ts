@@ -2,7 +2,15 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-export const useSetParams = () => {
+export type QueryParams = {
+	page: number;
+	perPage: number;
+	search: string;
+	orderBy: string;
+	sort: string;
+};
+
+export const useSetParams = (defaultParams?: Partial<QueryParams>) => {
 	const { replace } = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -10,6 +18,7 @@ export const useSetParams = () => {
 	const setParams = (newParams: Record<string, string | number>) => {
 		const params = new URLSearchParams(searchParams);
 		Object.keys(newParams).forEach(key => {
+			if (!newParams[key as string]) params.delete(key);
 			params.set(key, String(newParams[key as string]));
 		});
 
@@ -19,6 +28,8 @@ export const useSetParams = () => {
 	const search = searchParams.get('search') ?? '';
 	const page = Number(searchParams.get('page') ?? 1);
 	const perPage = Number(searchParams.get('perPage') ?? 10);
+	const orderBy = searchParams.get('orderBy') || defaultParams?.orderBy || '';
+	const sort = searchParams.get('sort') || defaultParams?.sort || 'asc';
 
 	return {
 		setParams,
@@ -26,6 +37,8 @@ export const useSetParams = () => {
 			search,
 			page,
 			perPage,
+			orderBy,
+			sort,
 		},
 	};
 };
