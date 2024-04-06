@@ -17,4 +17,5 @@ export interface GetAttendeesParams {
 	perPage: number;
 	orderBy: string;
 	sort: string;
+	eventId: string;
 }

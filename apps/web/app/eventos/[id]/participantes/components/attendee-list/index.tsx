@@ -6,7 +6,6 @@ import { IconButton } from '@app/components/icon-button';
 import { SearchBar } from '@app/components/search-bar';
 import { TableColumns, TableHeader } from '@app/components/table-header';
 import { TablePagination } from '@app/components/table-pagination';
-import { Checkbox } from '@app/components/ui/checkbox';
 import {
 	Table,
 	TableBody,
@@ -31,10 +30,10 @@ const columns: TableColumns[] = [
 	{ label: 'Data de criação', value: 'checkedInAt', isDisabledSort: true },
 ];
 
-export const AttendeeList = () => {
+export const AttendeeList = ({ eventId }: { eventId: string }) => {
 	const { params, setParams } = useSetParams({ orderBy: 'id' });
 	const { data, isLoading } = useQuery({
-		queryFn: () => getEventAttendeesFn(params),
+		queryFn: () => getEventAttendeesFn({ ...params, eventId }),
 		queryKey: ['attendees', params],
 		retry: 1,
 		keepPreviousData: true,
@@ -84,9 +83,6 @@ export const AttendeeList = () => {
 					{!isLoading &&
 						attendees?.map(attendee => (
 							<TableRow key={attendee.id} className="border-white/10">
-								<TableCell>
-									<Checkbox />
-								</TableCell>
 								<TableCell>{attendee.id}</TableCell>
 								<TableCell>
 									<div className="flex flex-col gap-1">
@@ -112,6 +108,8 @@ export const AttendeeList = () => {
 						page={params.page}
 						total={total}
 						totalPages={totalPages}
+						headerColumnsLength={columns.length + 2}
+						perPage={params.perPage}
 					/>
 				</TableFooter>
 			</Table>
