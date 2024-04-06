@@ -1,7 +1,8 @@
 export interface Event {
-	id: number;
+	id?: string;
 	title: string;
 	details?: string;
+	maximumAttendees?: number;
 }
 
 export interface EventsResponse {

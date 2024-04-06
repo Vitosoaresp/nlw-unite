@@ -26,6 +26,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { CircleDashed, MoreHorizontal, Pencil, Users } from 'lucide-react';
 import Link from 'next/link';
+import { CreateEvent } from '../create-event';
 
 dayjs.extend(relativeTime);
 dayjs.locale('pt-br');
@@ -60,11 +61,14 @@ export const EventsList = () => {
 	};
 
 	return (
-		<div className="space-y-4">
-			<div className="flex gap-3 items-center">
-				<h1 className="text-2xl font-bold">Eventos</h1>
+		<div className="space-y-4 lg:min-w-[1214px]">
+			<div className="flex justify-between items-center">
+				<div className="flex gap-3 items-center">
+					<h1 className="text-2xl font-bold">Eventos</h1>
 
-				<SearchBar />
+					<SearchBar />
+				</div>
+				<CreateEvent />
 			</div>
 
 			<Table className="w-full">
@@ -123,7 +127,7 @@ export const EventsList = () => {
 						page={params.page}
 						total={total}
 						totalPages={totalPages}
-						headerColumnsLength={columns.length + 2}
+						headerColumnsLength={columns.length + 1}
 						perPage={params.perPage}
 					/>
 				</TableFooter>
