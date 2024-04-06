@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Header } from './components/header';
+import { Toaster } from './components/ui/toaster';
 import './globals.css';
 import ReactQueryProvider from './provider/react-query-provider';
 
@@ -24,6 +25,7 @@ export default function RootLayout({
 				<ReactQueryProvider>
 					<Header />
 					{children}
+					<Toaster />
 				</ReactQueryProvider>
 			</body>
 		</html>
