@@ -16,6 +16,7 @@ import { getEvent } from './routes/get-event';
 import { getEventAttendees } from './routes/get-event-attendees';
 import { getEvents } from './routes/get-events';
 import { registerForEvent } from './routes/register-for-event';
+import { updateEvent } from './routes/update-event';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -51,9 +52,10 @@ app.register(getAttendeeBadge);
 app.register(checkIn);
 app.register(getEventAttendees);
 app.register(getEvents);
+app.register(updateEvent);
 
 app.get('/', async (request, reply) => {
-	return { hello: 'world' };
+	return reply.status(200).send({ hello: 'world' });
 });
 
 app.setErrorHandler(errorHandler);
