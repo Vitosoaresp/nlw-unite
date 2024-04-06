@@ -14,12 +14,16 @@ interface TablePaginationProps {
 	totalPages: number;
 	total: number;
 	page: number;
+	perPage: number;
+	headerColumnsLength: number;
 }
 
 export const TablePagination = ({
 	total,
 	totalPages,
 	page,
+	headerColumnsLength,
+	perPage,
 }: TablePaginationProps) => {
 	const { setParams } = useSetParams();
 	const handleNextPage = () => {
@@ -40,8 +44,10 @@ export const TablePagination = ({
 
 	return (
 		<TableRow>
-			<TableCell colSpan={3}>Mostrando 10 de {total} items</TableCell>
-			<TableCell className="text-right" colSpan={3}>
+			<TableCell colSpan={headerColumnsLength / 2}>
+				Mostrando {total > perPage ? perPage : total} de {total} items
+			</TableCell>
+			<TableCell className="text-right" colSpan={headerColumnsLength / 2}>
 				<div className="inline-flex gap-8 items-center">
 					<span>
 						Pagina {page} de {totalPages}

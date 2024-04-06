@@ -6,7 +6,12 @@ import { IconButton } from '@app/components/icon-button';
 import { SearchBar } from '@app/components/search-bar';
 import { TableColumns, TableHeader } from '@app/components/table-header';
 import { TablePagination } from '@app/components/table-pagination';
-import { Checkbox } from '@app/components/ui/checkbox';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@app/components/ui/dropdown-menu';
 import {
 	Table,
 	TableBody,
@@ -19,7 +24,8 @@ import { getEventsFn } from '@app/service/get-events';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { CircleDashed, MoreHorizontal } from 'lucide-react';
+import { CircleDashed, MoreHorizontal, Pencil, Users } from 'lucide-react';
+import Link from 'next/link';
 
 dayjs.extend(relativeTime);
 dayjs.locale('pt-br');
@@ -82,15 +88,31 @@ export const EventsList = () => {
 					{!isLoading &&
 						events?.map(event => (
 							<TableRow key={event.id} className="border-white/10">
-								<TableCell>
-									<Checkbox />
-								</TableCell>
 								<TableCell>{event.title}</TableCell>
 								<TableCell>{event.details ?? '-'}</TableCell>
-								<TableCell>
-									<IconButton className="bg-black/20 border-white/10">
-										<MoreHorizontal className="size-4" />
-									</IconButton>
+								<TableCell className="text-end">
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<IconButton className="bg-black/20 border-white/10">
+												<MoreHorizontal className="size-4" />
+											</IconButton>
+										</DropdownMenuTrigger>
+
+										<DropdownMenuContent className="w-56 bg-zinc-950 border-white/10 text-zinc-50">
+											<DropdownMenuItem className="gap-3" asChild>
+												<Link href={`/eventos/${event.id}`}>
+													<Pencil className="size-4" />
+													Editar
+												</Link>
+											</DropdownMenuItem>
+											<DropdownMenuItem className="gap-3" asChild>
+												<Link href={`/eventos/${event.id}/participantes`}>
+													<Users className="size-4" />
+													Visualizar Participantes
+												</Link>
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
 								</TableCell>
 							</TableRow>
 						))}
@@ -101,6 +123,8 @@ export const EventsList = () => {
 						page={params.page}
 						total={total}
 						totalPages={totalPages}
+						headerColumnsLength={columns.length + 2}
+						perPage={params.perPage}
 					/>
 				</TableFooter>
 			</Table>

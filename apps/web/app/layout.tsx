@@ -19,7 +19,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${inter.className} bg-zinc-950 max-w-[1216px] mx-auto py-5 text-zinc-50 antialiased flex flex-col gap-5`}
+				className={`${inter.className} bg-zinc-950 max-w-[1216px] mx-auto my-5 text-zinc-50 antialiased flex flex-col gap-5`}
 			>
 				<ReactQueryProvider>
 					<Header />

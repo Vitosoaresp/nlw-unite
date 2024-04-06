@@ -1,6 +1,5 @@
 import { cn } from '@app/lib/utils';
 import { ArrowUp } from 'lucide-react';
-import { Checkbox } from './ui/checkbox';
 import { TableHeader as Root, TableHead, TableRow } from './ui/table';
 
 export type TableColumns = {
@@ -27,9 +26,6 @@ export const TableHeader = ({
 	return (
 		<Root {...props}>
 			<TableRow style={{ height: 47 }}>
-				<TableHead style={{ width: '48px' }}>
-					<Checkbox />
-				</TableHead>
 				{columns.map(column => (
 					<TableHead key={column.value}>
 						{column.isDisabledSort && (
@@ -54,7 +50,7 @@ export const TableHeader = ({
 						)}
 					</TableHead>
 				))}
-				<TableHead style={{ width: '64px' }} />
+				<TableHead style={{ width: '50px' }} />
 			</TableRow>
 		</Root>
 	);
