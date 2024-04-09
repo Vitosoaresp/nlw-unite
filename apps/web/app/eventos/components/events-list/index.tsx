@@ -66,7 +66,7 @@ export const EventsList = () => {
 				<div className="flex gap-3 items-center">
 					<h1 className="text-2xl font-bold">Eventos</h1>
 
-					<SearchBar />
+					<SearchBar placeholder="Buscar eventos" />
 				</div>
 				<CreateEvent />
 			</div>

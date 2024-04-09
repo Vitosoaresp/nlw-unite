@@ -59,7 +59,7 @@ export const AttendeeList = ({ eventId }: { eventId: string }) => {
 			<div className="flex gap-3 items-center">
 				<h1 className="text-2xl font-bold">Participantes</h1>
 
-				<SearchBar />
+				<SearchBar placeholder="Buscar participantes" />
 			</div>
 
 			<Table className="w-full">
